@@ -8,13 +8,15 @@
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
 	    android:orientation="vertical" 
-	    android:background="@android:color/darker_gray">
+	    android:background="@drawable/bg_black">
 	    <TextView 
 	        android:id="@+id/dropDownView_title"
 	        android:layout_width="fill_parent"
 	        android:layout_height="wrap_content"
 	        android:layout_marginTop="10dip"
 	        android:gravity="center"
+		    android:textColor="@android:color/white"
+	        android:textSize="18sp"
 	        android:text="Title"/>
 	    
 	    <RelativeLayout 
@@ -28,6 +30,8 @@
 		        android:layout_height="wrap_content"
 		        android:layout_centerInParent="true"
 		        android:gravity="center"
+		        android:textColor="@android:color/white"
+	        	android:textSize="14sp"
 		        android:text="Message"/>
 	        
 	        <LinearLayout 
@@ -78,11 +82,11 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_gravity="center_horizontal"
-	        android:layout_marginTop="10dip"
-	        android:layout_marginBottom="5dip"/>
+	        android:layout_marginTop="15dip"
+	        android:layout_marginBottom="3dip"/>
 	</LinearLayout>
 	<ImageView 
 	    android:layout_width="fill_parent"
 	    android:layout_height="2dip"
-	    android:background="@android:color/black"/>
+	    android:background="@android:color/darker_gray"/>
 </LinearLayout>

@@ -68,13 +68,14 @@ containing a value of this type.
         public static final int topOffset=0x7f010004;
     }
     public static final class drawable {
-        public static final int btn_black=0x7f020000;
-        public static final int btn_blue=0x7f020001;
-        public static final int btn_green=0x7f020002;
-        public static final int btn_purple=0x7f020003;
-        public static final int btn_red=0x7f020004;
-        public static final int btn_yellow=0x7f020005;
-        public static final int ic_launcher=0x7f020006;
+        public static final int bg_black=0x7f020000;
+        public static final int btn_black=0x7f020001;
+        public static final int btn_blue=0x7f020002;
+        public static final int btn_green=0x7f020003;
+        public static final int btn_purple=0x7f020004;
+        public static final int btn_red=0x7f020005;
+        public static final int btn_yellow=0x7f020006;
+        public static final int ic_launcher=0x7f020007;
     }
     public static final class id {
         public static final int bottomToTop=0x7f040001;
