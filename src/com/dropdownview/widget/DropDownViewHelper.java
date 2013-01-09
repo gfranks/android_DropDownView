@@ -15,10 +15,8 @@ import android.util.TypedValue;
 import android.view.Display;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -160,6 +158,7 @@ public class DropDownViewHelper {
     		if (i < 3) {
     			Button btn = new Button(mActivity);
     			btn.setText(buttonTitles[i]);
+    			btn.setTextSize(TypedValue.COMPLEX_UNIT_SP,13);
     			btn.setTag(i);
     			
     			btn.setBackgroundResource(R.drawable.btn_blue);
@@ -206,7 +205,7 @@ public class DropDownViewHelper {
     		width = display.getWidth();
     	}
     	
-    	return width/5;
+    	return width/6;
     }
 	
 	private OnClickListener mButtonClickListener = new OnClickListener() {
