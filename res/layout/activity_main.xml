@@ -1,0 +1,33 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity" >
+
+    <Button
+		android:id="@+id/button_open"
+		android:layout_width="100dp"
+		android:layout_height="wrap_content"
+		android:text="Open"
+		android:layout_centerInParent="true"
+		android:visibility="visible" />
+    
+    <com.dropdownview.widget.DropDownView
+		xmlns:my="http://schemas.android.com/apk/res/com.dropdownview.sample"
+		android:id="@+id/drawer"
+		my:direction="topToBottom"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		my:handle="@+id/handle"
+		my:content="@+id/content">
+		<include
+			android:id="@id/content"
+			layout="@layout/sample" />
+		<ImageView
+			android:id="@id/handle"
+			android:layout_width="wrap_content"
+			android:layout_height="0dip" 
+			android:contentDescription="Drop Down View"/>
+	</com.dropdownview.widget.DropDownView>
+
+</RelativeLayout>

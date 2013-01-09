@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    
+    <LinearLayout
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="vertical" 
+	    android:background="@android:color/darker_gray">
+	    <TextView 
+	        android:id="@+id/dropDownView_title"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_marginTop="10dip"
+	        android:gravity="center"
+	        android:text="Title"/>
+	    
+	    <RelativeLayout 
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_marginTop="10dip">
+	        
+	        <TextView 
+	        	android:id="@+id/dropDownView_message"
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_centerInParent="true"
+		        android:gravity="center"
+		        android:text="Message"/>
+	        
+	        <LinearLayout 
+	            android:id="@+id/dropDownView_defaultTextViewContainer"
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content"
+	            android:layout_centerInParent="true"
+	            android:orientation="vertical">
+	            
+	            <EditText 
+	                android:id="@+id/dropDownView_defaultEditText"
+	                android:layout_width="fill_parent"
+	                android:layout_height="wrap_content"
+	                android:layout_marginLeft="10dip"
+	                android:layout_marginRight="10dip"
+	                android:hint="Placeholder text"/>
+	            
+	        </LinearLayout>
+	        
+	        <LinearLayout 
+	            android:id="@+id/dropDownView_loginAndPasswordTextViewContainer"
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content"
+	            android:layout_centerInParent="true"
+	            android:orientation="vertical">
+	            
+	            <EditText 
+	                android:id="@+id/dropDownView_loginEditText"
+	                android:layout_width="fill_parent"
+	                android:layout_height="wrap_content"
+	                android:layout_marginLeft="10dip"
+	                android:layout_marginRight="10dip"
+	                android:hint="Enter email address"/>
+	            <EditText 
+	                android:id="@+id/dropDownView_passEditText"
+	                android:layout_width="fill_parent"
+	                android:layout_height="wrap_content"
+	                android:layout_marginLeft="10dip"
+	                android:layout_marginRight="10dip"
+	                android:hint="Password"/>
+	            
+	        </LinearLayout>
+	        
+	    </RelativeLayout>
+	    
+	    <LinearLayout 
+	        android:id="@+id/dropDowView_buttonContainer"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_marginTop="10dip"/>
+	</LinearLayout>
+</LinearLayout>
