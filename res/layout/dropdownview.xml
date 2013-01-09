@@ -31,7 +31,7 @@
 		        android:text="Message"/>
 	        
 	        <LinearLayout 
-	            android:id="@+id/dropDownView_defaultTextViewContainer"
+	            android:id="@+id/dropDownView_defaultEditTextContainer"
 	            android:layout_width="fill_parent"
 	            android:layout_height="wrap_content"
 	            android:layout_centerInParent="true"
@@ -48,7 +48,7 @@
 	        </LinearLayout>
 	        
 	        <LinearLayout 
-	            android:id="@+id/dropDownView_loginAndPasswordTextViewContainer"
+	            android:id="@+id/dropDownView_loginAndPasswordEditTextContainer"
 	            android:layout_width="fill_parent"
 	            android:layout_height="wrap_content"
 	            android:layout_centerInParent="true"
@@ -75,8 +75,9 @@
 	    
 	    <LinearLayout 
 	        android:id="@+id/dropDowView_buttonContainer"
-	        android:layout_width="fill_parent"
+	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
+	        android:layout_gravity="center_horizontal"
 	        android:layout_marginTop="10dip"/>
 	</LinearLayout>
 </LinearLayout>

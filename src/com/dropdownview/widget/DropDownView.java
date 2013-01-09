@@ -11,6 +11,7 @@ package com.dropdownview.widget;
 
 import com.dropdownview.sample.R;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
@@ -40,7 +41,7 @@ public class DropDownView extends ViewGroup {
 	private static final float			MAXIMUM_TAP_VELOCITY		= 100.0f;
 	private static final float			MAXIMUM_MINOR_VELOCITY		= 150.0f;
 	private static final float			MAXIMUM_MAJOR_VELOCITY		= 200.0f;
-	private static final float			MAXIMUM_ACCELERATION		= 2000.0f;
+	private static final float			MAXIMUM_ACCELERATION		= 500.0f;
 	private static final int			VELOCITY_UNITS				= 1000;
 	private static final int			MSG_ANIMATE					= 1000;
 	private static final int			ANIMATION_FRAME_DURATION	= 1000 / 60;
@@ -69,11 +70,11 @@ public class DropDownView extends ViewGroup {
 	private int							mHandleHeight;
 	private int							mHandleWidth;
 	
-	private OnDropDownViewShowListener   mOnDropDownViewShowListener;
-	private OnDropDownViewDismissListener	 mOnDropDownViewDismissListener;
-	private OnDropDownViewScrollListener mOnDropDownViewScrollListener;
+	private OnDropDownViewShowListener    mOnDropDownViewShowListener;
+	private OnDropDownViewDismissListener mOnDropDownViewDismissListener;
+	private OnDropDownViewScrollListener  mOnDropDownViewScrollListener;
 	
-	private final Handler				mHandler							= new SlidingHandler();
+	private final Handler				mHandler					= new SlidingHandler();
 	private float						mAnimatedAcceleration;
 	private float						mAnimatedVelocity;
 	private float						mAnimationPosition;
@@ -930,9 +931,9 @@ public class DropDownView extends ViewGroup {
 	 * @param OnDropDownViewShowListener
 	 *           The listener to be notified when the drop down view is shown.
 	 */
-	public void setOnDropDownViewShowListener( OnDropDownViewShowListener OnDropDownViewShowListener )
+	public void setOnDropDownViewShowListener( OnDropDownViewShowListener onDropDownViewShowListener )
 	{
-		mOnDropDownViewShowListener = OnDropDownViewShowListener;
+		mOnDropDownViewShowListener = onDropDownViewShowListener;
 	}
 	
 	/**
@@ -942,9 +943,9 @@ public class DropDownView extends ViewGroup {
 	 * @param OnDropDownViewDismissListener
 	 *           The listener to be notified when the drop down view is dismissed.
 	 */
-	public void setOnDropDownViewDismissListener( OnDropDownViewDismissListener OnDropDownViewDismissListener )
+	public void setOnDropDownViewDismissListener( OnDropDownViewDismissListener onDropDownViewDismissListener )
 	{
-		mOnDropDownViewDismissListener = OnDropDownViewDismissListener;
+		mOnDropDownViewDismissListener = onDropDownViewDismissListener;
 	}
 	
 	/**
@@ -1039,6 +1040,7 @@ public class DropDownView extends ViewGroup {
 		}
 	}
 	
+	@SuppressLint("HandlerLeak") 
 	private class SlidingHandler extends Handler {
 		
 		public void handleMessage( Message m )

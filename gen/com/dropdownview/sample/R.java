@@ -77,8 +77,8 @@ containing a value of this type.
         public static final int drawer=0x7f040005;
         public static final int dropDowView_buttonContainer=0x7f04000f;
         public static final int dropDownView_defaultEditText=0x7f04000b;
-        public static final int dropDownView_defaultTextViewContainer=0x7f04000a;
-        public static final int dropDownView_loginAndPasswordTextViewContainer=0x7f04000c;
+        public static final int dropDownView_defaultEditTextContainer=0x7f04000a;
+        public static final int dropDownView_loginAndPasswordEditTextContainer=0x7f04000c;
         public static final int dropDownView_loginEditText=0x7f04000d;
         public static final int dropDownView_message=0x7f040009;
         public static final int dropDownView_passEditText=0x7f04000e;
@@ -91,7 +91,7 @@ containing a value of this type.
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
-        public static final int sample=0x7f030001;
+        public static final int dropdownview=0x7f030001;
     }
     public static final class menu {
         public static final int activity_main=0x7f070000;
