@@ -1,6 +1,10 @@
 package com.dropdownview.widget;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import com.dropdownview.sample.R;
+import com.dropdownview.widget.DropDownView.OnDropDownViewShowListener;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -14,6 +18,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -40,9 +45,13 @@ public class DropDownViewHelper {
     LinearLayout mLoginAndPasswordContainer;
     LinearLayout mButtonContainer;
     
+    boolean mHasTimer;
+    long mDurationForTimer;
+    
     public DropDownViewHelper(){}
     
-    public void initWithTitle(String title, Activity activity, int dropDownViewResId, DropDownViewStyle style) {
+    public void initWithTitle(String title, Activity activity, int dropDownViewResId, 
+    		DropDownViewStyle style, boolean withTimer, long durationInMilli) {
     	mActivity = activity;
     	mDropDownView = (DropDownView)activity.findViewById(dropDownViewResId);
     	mTitleLabel = (TextView)activity.findViewById(R.id.dropDownView_title);
@@ -56,9 +65,13 @@ public class DropDownViewHelper {
     	
     	setStyle(style);
     	setTitleLabelText(title);
+    	
+    	mHasTimer = withTimer;
+    	mDurationForTimer = durationInMilli;
     }
     
-    public void initWithTitleAndMessage(String title, String message, Activity activity, int dropDownViewResId) {
+    public void initWithTitleAndMessage(String title, String message, Activity activity, int dropDownViewResId,
+    		boolean withTimer, long durationInMilli) {
     	mActivity = activity;
     	mDropDownView = (DropDownView)activity.findViewById(dropDownViewResId);
     	mTitleLabel = (TextView)activity.findViewById(R.id.dropDownView_title);
@@ -73,13 +86,17 @@ public class DropDownViewHelper {
     	setStyle(DropDownViewStyle.Default);
     	setTitleLabelText(title);
     	setMessageLabelText(message);
+    	
+    	mHasTimer = withTimer;
+    	mDurationForTimer = durationInMilli;
     }
     
-    public void showDropDown() {
+    public void showDropDownView() {
+    	mDropDownView.setOnDropDownViewShowListener(mOnDropDownShowListener);
     	mDropDownView.animateShow();
     }
     
-    public void dismissDropDown() {
+    public void dismissDropDownView() {
     	mDropDownView.animateDismiss();
     }
     
@@ -144,15 +161,31 @@ public class DropDownViewHelper {
     			Button btn = new Button(mActivity);
     			btn.setText(buttonTitles[i]);
     			btn.setTag(i);
+    			
+    			btn.setBackgroundResource(R.drawable.btn_blue);
+    			btn.setTextColor(mActivity.getResources().getColor(android.R.color.white));
     			btn.setOnClickListener(mButtonClickListener);
     			
     			Resources r = mActivity.getResources();
     			int px = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 
     					calculateButtonWidth(buttonTitles.length), r.getDisplayMetrics());
-    			mButtonContainer.addView(btn, new LayoutParams(
-    					px, LayoutParams.WRAP_CONTENT));
+    			LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(px, LinearLayout.LayoutParams.WRAP_CONTENT);
+    			params.leftMargin = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 
+    					5, r.getDisplayMetrics());
+    			params.rightMargin = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 
+    					5, r.getDisplayMetrics());
+    			mButtonContainer.addView(btn, params);
     		}
     	}
+    }
+    
+    public void setOnClickListenerForDismissal() {
+    	mDropDownView.setOnClickListener(new OnClickListener() {
+    		@Override
+    		public void onClick(View v) {
+    			dismissDropDownView();
+    		}
+    	});
     }
     
     public boolean isDropDownShowing() {
@@ -185,11 +218,28 @@ public class DropDownViewHelper {
 		}
     };
     
+    private OnDropDownViewShowListener mOnDropDownShowListener = new OnDropDownViewShowListener() {
+		@Override
+		public void onDropDownViewShown() {
+			if (mHasTimer) {
+				Timer timer = new Timer();
+				DropDownViewTimerTask dropDownTimer = new DropDownViewTimerTask();
+				timer.scheduleAtFixedRate(dropDownTimer, 0, mDurationForTimer);
+			}
+		}
+	};
+    
     public void setDropDownButtonClickedListener(DropDownButtonClickedListener dropDownButtonClickedListener) {
     	this.mDropDownButtonClickedListener = dropDownButtonClickedListener;
     }
     
     public static interface DropDownButtonClickedListener {
     	public void clickedButtonAtIndex(int index);
+    }
+    
+    class DropDownViewTimerTask extends TimerTask {
+    	public void run() {
+    		dismissDropDownView();
+    	}
     }
 }

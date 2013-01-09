@@ -25,7 +25,7 @@ public class MainActivity extends Activity {
         mOpenButton.setOnClickListener( new OnClickListener() {
 			@Override
 			public void onClick( View v ) {
-				mDropDownViewHelper.showDropDown();
+				mDropDownViewHelper.showDropDownView();
 			}
 		});
     }
@@ -42,10 +42,11 @@ public class MainActivity extends Activity {
     	super.onContentChanged();
     	mOpenButton = (Button) findViewById(R.id.button_open);
     	mDropDownViewHelper = new DropDownViewHelper();
-    	mDropDownViewHelper.initWithTitle("Sample Drop Down", this, R.id.drawer, DropDownViewStyle.Default);
+    	mDropDownViewHelper.initWithTitle("Sample Drop Down", this, R.id.drawer, DropDownViewStyle.Default, true, 5000);
     	
     	String[] buttonTitles = {"Dismiss", "OK"};
     	mDropDownViewHelper.setButtons(buttonTitles);
+    	mDropDownViewHelper.setOnClickListenerForDismissal();
     	mDropDownViewHelper.setDropDownButtonClickedListener(mDropDownButtonClickListener);
     }
 	
@@ -53,7 +54,7 @@ public class MainActivity extends Activity {
 		@Override
 		public void clickedButtonAtIndex(int index) {
 			Log.e("Clicked button!!!!", "At Index: " + index);
-			mDropDownViewHelper.dismissDropDown();
+			mDropDownViewHelper.dismissDropDownView();
 		}
 	};
 }
