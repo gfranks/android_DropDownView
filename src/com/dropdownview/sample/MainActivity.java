@@ -42,7 +42,7 @@ public class MainActivity extends Activity {
     	super.onContentChanged();
     	mOpenButton = (Button) findViewById(R.id.button_open);
     	mDropDownViewHelper = new DropDownViewHelper();
-    	mDropDownViewHelper.initWithTitle("Sample Drop Down", this, R.id.drawer, DropDownViewStyle.LoginPasswordInput, true, 5000);
+    	mDropDownViewHelper.initWithTitle("Sample Drop Down", this, R.id.drawer, DropDownViewStyle.Default, true, 5000);
     	
     	String[] buttonTitles = {"Dismiss", "OK"};
     	mDropDownViewHelper.setButtons(buttonTitles);
