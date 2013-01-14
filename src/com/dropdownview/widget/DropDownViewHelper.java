@@ -2,21 +2,24 @@ package com.dropdownview.widget;
 
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.dropdownview.sample.R;
 import com.dropdownview.widget.DropDownView.OnDropDownViewShowListener;
+import com.dropdownview.widget.DropDownView.OnDropDownViewDismissListener;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.res.Resources;
-import android.graphics.Point;
 import android.text.InputType;
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
-import android.view.Display;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -36,12 +39,14 @@ public class DropDownViewHelper {
 	
 	TextView mTitleLabel;
     TextView mMessageLabel;
+    TextView mErrorLabel;
     EditText mDefaultEditText;
     EditText mLoginEditText;
     EditText mPasswordEditText;
-    LinearLayout mDefaultTextViewContainer;
+    FrameLayout mDefaultTextViewContainer;
     LinearLayout mLoginAndPasswordContainer;
     LinearLayout mButtonContainer;
+    DropDownShowDismissListener showDismissListener;
     
     boolean mHasTimer;
     long mDurationForTimer;
@@ -51,15 +56,7 @@ public class DropDownViewHelper {
     public void initWithTitle(String title, Activity activity, int dropDownViewResId, 
     		DropDownViewStyle style, boolean withTimer, long durationInMilli) {
     	mActivity = activity;
-    	mDropDownView = (DropDownView)activity.findViewById(dropDownViewResId);
-    	mTitleLabel = (TextView)activity.findViewById(R.id.dropDownView_title);
-    	mMessageLabel = (TextView)activity.findViewById(R.id.dropDownView_message);
-    	mDefaultEditText = (EditText)activity.findViewById(R.id.dropDownView_defaultEditText);
-    	mLoginEditText = (EditText)activity.findViewById(R.id.dropDownView_loginEditText);
-    	mPasswordEditText = (EditText)activity.findViewById(R.id.dropDownView_passEditText);
-    	mDefaultTextViewContainer = (LinearLayout)activity.findViewById(R.id.dropDownView_defaultEditTextContainer);
-    	mLoginAndPasswordContainer = (LinearLayout)activity.findViewById(R.id.dropDownView_loginAndPasswordEditTextContainer);
-    	mButtonContainer = (LinearLayout)activity.findViewById(R.id.dropDowView_buttonContainer);
+    	setupSubViews(dropDownViewResId);
     	
     	setStyle(style);
     	setTitleLabelText(title);
@@ -71,15 +68,7 @@ public class DropDownViewHelper {
     public void initWithTitleAndMessage(String title, String message, Activity activity, int dropDownViewResId,
     		boolean withTimer, long durationInMilli) {
     	mActivity = activity;
-    	mDropDownView = (DropDownView)activity.findViewById(dropDownViewResId);
-    	mTitleLabel = (TextView)activity.findViewById(R.id.dropDownView_title);
-    	mMessageLabel = (TextView)activity.findViewById(R.id.dropDownView_message);
-    	mDefaultEditText = (EditText)activity.findViewById(R.id.dropDownView_defaultEditText);
-    	mLoginEditText = (EditText)activity.findViewById(R.id.dropDownView_loginEditText);
-    	mPasswordEditText = (EditText)activity.findViewById(R.id.dropDownView_passEditText);
-    	mDefaultTextViewContainer = (LinearLayout)activity.findViewById(R.id.dropDownView_defaultEditTextContainer);
-    	mLoginAndPasswordContainer = (LinearLayout)activity.findViewById(R.id.dropDownView_loginAndPasswordEditTextContainer);
-    	mButtonContainer = (LinearLayout)activity.findViewById(R.id.dropDowView_buttonContainer);
+    	setupSubViews(dropDownViewResId);
     	
     	setStyle(DropDownViewStyle.Default);
     	setTitleLabelText(title);
@@ -89,8 +78,44 @@ public class DropDownViewHelper {
     	mDurationForTimer = durationInMilli;
     }
     
+    public void setupSubViews(int dropDownViewResId) {
+    	mDropDownView = (DropDownView)mActivity.findViewById(dropDownViewResId);
+    	mTitleLabel = (TextView)mActivity.findViewById(R.id.dropDownView_title);
+    	mMessageLabel = (TextView)mActivity.findViewById(R.id.dropDownView_message);
+    	mErrorLabel = (TextView)mActivity.findViewById(R.id.dropDowView_errorTextView);
+    	mDefaultEditText = (EditText)mActivity.findViewById(R.id.dropDownView_defaultEditText);
+    	mLoginEditText = (EditText)mActivity.findViewById(R.id.dropDownView_loginEditText);
+    	mPasswordEditText = (EditText)mActivity.findViewById(R.id.dropDownView_passEditText);
+    	mDefaultTextViewContainer = (FrameLayout)mActivity.findViewById(R.id.dropDownView_defaultEditTextContainer);
+    	mLoginAndPasswordContainer = (LinearLayout)mActivity.findViewById(R.id.dropDownView_loginAndPasswordEditTextContainer);
+    	mButtonContainer = (LinearLayout)mActivity.findViewById(R.id.dropDowView_buttonContainer);
+    	
+    	((Button)mActivity.findViewById(R.id.dropDownView_defaultEditText_clear))
+    		.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					mDefaultEditText.setText("");
+				}
+    	});
+    	((Button)mActivity.findViewById(R.id.dropDownView_loginEditText_clear))
+			.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					mLoginEditText.setText("");
+				}
+		});
+    	((Button)mActivity.findViewById(R.id.dropDownView_passEditText_clear))
+			.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					mPasswordEditText.setText("");
+				}
+		});
+    }
+    
     public void showDropDownView() {
     	mDropDownView.setOnDropDownViewShowListener(mOnDropDownShowListener);
+    	mDropDownView.setOnDropDownViewDismissListener(mOnDropDownDismissListener);
     	mDropDownView.animateShow();
     }
     
@@ -129,6 +154,11 @@ public class DropDownViewHelper {
     	mMessageLabel.setText(message);
     }
     
+    public void setErrorMessageWithVisibility(int visibility, String message) {
+    	mErrorLabel.setVisibility(visibility);
+    	mErrorLabel.setText(message);
+    }
+    
     public EditText getEditTextAtIndex(int index) {
     	EditText editText = null;
     	switch (mStyle) {
@@ -153,6 +183,26 @@ public class DropDownViewHelper {
     	return editText;
     }
     
+    public boolean isValidEmailAddress() {
+    	switch (mStyle) {
+    	case PlainTextInput:
+    	case SecureTextInput:
+    		return isValidEmail(mDefaultEditText.getText().toString());
+    	case LoginPasswordInput:
+    		return isValidEmail(mLoginEditText.getText().toString());
+    	case Default:
+    		break;
+    	}
+    	
+    	return false;
+    }
+    
+    public boolean isValidEmail(String value){
+		Pattern p = Pattern.compile("^[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$");
+		Matcher m = p.matcher(value);
+		return m.find();
+	}
+    
     public void setButtons(String[] buttonTitles) {
     	for (int i=0; i<buttonTitles.length; i++) {
     		if (i < 3) {
@@ -173,7 +223,10 @@ public class DropDownViewHelper {
     					5, r.getDisplayMetrics());
     			params.rightMargin = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 
     					5, r.getDisplayMetrics());
+    			params.height = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 
+    					35, r.getDisplayMetrics());
     			mButtonContainer.addView(btn, params);
+    			btn.setGravity(Gravity.CENTER);
     		}
     	}
     }
@@ -187,23 +240,22 @@ public class DropDownViewHelper {
     	});
     }
     
+    public void setOnClickListenerForDismissal(OnClickListener listener) {
+    	mDropDownView.setOnClickListener(listener);
+    }
+    
+    public void setDropDownShowOrHideListener(DropDownShowDismissListener listener) {
+    	showDismissListener = listener;
+    }
+    
     public boolean isDropDownShowing() {
     	return mDropDownView.isShowing();
     }
     
-	@SuppressLint("NewApi") 
-    @SuppressWarnings("deprecation")
-    private int calculateButtonWidth(int buttonCount) {
-    	Display display = mActivity.getWindowManager().getDefaultDisplay();
+	private int calculateButtonWidth(int buttonCount) {
+		DisplayMetrics metrics = mActivity.getBaseContext().getResources().getDisplayMetrics();
     	
-    	int width = 0;
-    	try { 
-    		Point size = new Point();
-    		display.getSize(size); 
-    		width = size.x; 
-    	} catch (NoSuchMethodError e) { 
-    		width = display.getWidth();
-    	}
+    	int width =  metrics.widthPixels; 
     	
     	return width/6;
     }
@@ -227,9 +279,22 @@ public class DropDownViewHelper {
 			}
 		}
 	};
+	
+	private OnDropDownViewDismissListener mOnDropDownDismissListener = new OnDropDownViewDismissListener() {	
+		@Override
+		public void onDropDownViewDismissed() {
+			if (showDismissListener != null) {
+				showDismissListener.didShowOrDismiss(false, true);
+			}
+		}
+	};
     
     public void setDropDownButtonClickedListener(DropDownButtonClickedListener dropDownButtonClickedListener) {
     	this.mDropDownButtonClickedListener = dropDownButtonClickedListener;
+    }
+    
+    public static interface DropDownShowDismissListener {
+    	public void didShowOrDismiss(boolean didShow, boolean didDismiss);
     }
     
     public static interface DropDownButtonClickedListener {

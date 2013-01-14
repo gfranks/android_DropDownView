@@ -2,6 +2,7 @@ package com.dropdownview.sample;
 
 import com.dropdownview.widget.DropDownViewHelper;
 import com.dropdownview.widget.DropDownViewHelper.DropDownButtonClickedListener;
+import com.dropdownview.widget.DropDownViewHelper.DropDownShowDismissListener;
 import com.dropdownview.widget.DropDownViewHelper.DropDownViewStyle;
 
 import android.os.Bundle;
@@ -41,20 +42,40 @@ public class MainActivity extends Activity {
     public void onContentChanged() {
     	super.onContentChanged();
     	mOpenButton = (Button) findViewById(R.id.button_open);
-    	mDropDownViewHelper = new DropDownViewHelper();
-    	mDropDownViewHelper.initWithTitle("Sample Drop Down", this, R.id.drawer, DropDownViewStyle.Default, true, 5000);
-    	
-    	String[] buttonTitles = {"Dismiss", "OK"};
-    	mDropDownViewHelper.setButtons(buttonTitles);
-    	mDropDownViewHelper.setOnClickListenerForDismissal();
-    	mDropDownViewHelper.setDropDownButtonClickedListener(mDropDownButtonClickListener);
+    	setupDropDownView();
     }
-	
-	private DropDownButtonClickedListener mDropDownButtonClickListener = new DropDownButtonClickedListener() {
-		@Override
-		public void clickedButtonAtIndex(int index) {
-			Log.e("Clicked button!!!!", "At Index: " + index);
-			mDropDownViewHelper.dismissDropDownView();
-		}
-	};
+    
+    public void setupDropDownView() {
+    	mDropDownViewHelper = new DropDownViewHelper();
+		mDropDownViewHelper.initWithTitle("Enter Email", this, R.id.drawer, 
+				DropDownViewStyle.PlainTextInput, false, 0);
+		
+		String[] buttonTitles = {"Dismiss", "Submit"};
+		mDropDownViewHelper.setButtons(buttonTitles);
+		mDropDownViewHelper.getEditTextAtIndex(0).setHint("Enter email address");
+		mDropDownViewHelper.setOnClickListenerForDismissal();
+		mDropDownViewHelper.setDropDownButtonClickedListener(new DropDownButtonClickedListener() {
+			@Override
+			public void clickedButtonAtIndex(int index) {
+				Log.e("Clicked button!!!!", "At Index: " + index);
+				if (index == 1 && mDropDownViewHelper.isValidEmailAddress()) {
+					mDropDownViewHelper.setErrorMessageWithVisibility(View.GONE, null);
+					mDropDownViewHelper.dismissDropDownView();
+				} else if (index == 0) {
+					mDropDownViewHelper.dismissDropDownView();
+				} else {
+					mDropDownViewHelper.setErrorMessageWithVisibility(View.VISIBLE,
+							"Please enter a valid email address");
+				}
+			}
+		});
+		mDropDownViewHelper.setDropDownShowOrHideListener(new DropDownShowDismissListener() {
+			@Override
+			public void didShowOrDismiss(boolean didShow, boolean didDismiss) {
+				if (didDismiss) {
+					
+				}
+			}
+		});
+    }
 }
