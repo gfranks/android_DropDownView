@@ -154,6 +154,11 @@ public class DropDownViewHelper {
     	mMessageLabel.setText(message);
     }
     
+    public void addMessageWithEditText(String message) {
+    	mMessageLabel.setText(message);
+    	mMessageLabel.setVisibility(View.VISIBLE);
+    }
+    
     public void setErrorMessageWithVisibility(int visibility, String message) {
     	mErrorLabel.setVisibility(visibility);
     	mErrorLabel.setText(message);

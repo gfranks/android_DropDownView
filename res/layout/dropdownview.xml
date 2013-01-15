@@ -19,20 +19,21 @@
 	        android:textSize="18sp"
 	        android:text="Title"/>
 	    
+	    <TextView 
+        	android:id="@+id/dropDownView_message"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_marginTop="10dip"
+	        android:layout_marginBottom="5dip"
+	        android:gravity="center"
+	        android:textColor="@android:color/black"
+        	android:textSize="14sp"
+	        android:text="Message"/>
+	    
 	    <RelativeLayout 
 	        android:layout_width="fill_parent"
 	        android:layout_height="wrap_content"
 	        android:layout_marginTop="10dip">
-	        
-	        <TextView 
-	        	android:id="@+id/dropDownView_message"
-		        android:layout_width="fill_parent"
-		        android:layout_height="wrap_content"
-		        android:layout_centerInParent="true"
-		        android:gravity="center"
-		        android:textColor="@android:color/black"
-	        	android:textSize="14sp"
-		        android:text="Message"/>
 	        
 	        <FrameLayout
 	            android:id="@+id/dropDownView_defaultEditTextContainer"
@@ -140,6 +141,6 @@
     <ImageView 
 	    android:layout_width="fill_parent"
 	    android:layout_height="2dip"
-	    android:background="@android:color/darker_gray"/>
+	    android:background="@color/dark_gray"/>
     
 </LinearLayout>
